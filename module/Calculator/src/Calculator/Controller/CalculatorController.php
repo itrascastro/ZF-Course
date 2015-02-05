@@ -19,6 +19,7 @@ namespace Calculator\Controller;
 
 use Calculator\Model\CalculatorModel;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 class CalculatorController extends AbstractActionController
 {
@@ -38,11 +39,15 @@ class CalculatorController extends AbstractActionController
 
     public function indexAction()
     {
+        $this->layout()->title .= ' - Calculator Menu';
+
         return [];
     }
 
     public function addAction()
     {
+        $this->layout()->title .= ' - Calculator Add';
+
         return ['title' => 'Add'];
     }
 
@@ -53,7 +58,18 @@ class CalculatorController extends AbstractActionController
 
         $this->model->add();
 
-        return ['result' => $this->model->getResult()];
+        $this->layout()->title .= ' - Calculator DoAdd';
+
+        $view = new ViewModel();
+        $view->setTemplate('calculator/calculator/result.phtml');
+
+        $result = $this->PrependZeros($this->model->getResult());
+
+        $view->result = $result;
+
+        return $view;
 
     }
+
+
 }

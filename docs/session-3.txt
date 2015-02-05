@@ -1,0 +1,46 @@
+ScanBit Session 1
+
+    - installing
+    - directory Structure
+    - config files
+    - creating a module: Calculator
+
+ScanBit Session 2
+
+    - Exercise: MyString Module
+
+ScanBit Session 3
+
+    - create a title var in the layout
+    - create partials for forms and menus
+    - change the default view to an action
+    - create a layout and setup for allowing different layouts for each module
+    - create a child view for menu
+    - create a view helper for forms or/and menus
+    - create a controller plugin for prepend strings
+    - Zend Tool
+
+ScanBit Session 4
+
+    - Database PDO Users
+    - Exercise: Database for links PDO version
+
+ScanBit Session 5
+
+    - TableGateWay Users
+    - Exercise TableGateWay Links
+
+ScanBit Session 6
+
+    - Zend\Form
+
+ScanBit Session 7
+
+    - Authentication
+
+ScanBit Session 8
+
+    - ACL
+    - ServiceManager
+    - EventManager
+    - Installing Modules

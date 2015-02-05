@@ -12,5 +12,7 @@
  */
 
 return array(
-    // ...
+    'application' => array(
+        'title' => 'ZF2 Course',
+    ),
 );

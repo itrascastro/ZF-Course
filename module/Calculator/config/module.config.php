@@ -8,6 +8,9 @@
  */
 
 return array(
+    'Calculator' => array(
+        'zeroes' => 3,
+    ),
     'router' => array(
         'routes' => array(
             'calculator\calculator\index' => array(
@@ -85,12 +88,23 @@ return array(
             'Calculator\Controller\Calculator' => 'Calculator\Controller\Factory\CalculatorControllerFactory',
         ),
     ),
+    'controller_plugins' => array(
+        'factories' => array(
+            'PrependZeros' => 'Calculator\Controller\Plugin\Factory\PrependZerosPluginFactory',
+        ),
+    ),
     'view_manager' => array(
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
+            'layout/layout'           => __DIR__ . '/../view/layout/layout2.phtml',
+            'calculator/partial/menu' => __DIR__ . '/../view/calculator/calculator/partial/menu.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
+        ),
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'formHelper' => 'Calculator\View\Helper\FormHelper',
         ),
     ),
 );

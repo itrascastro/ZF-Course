@@ -1,7 +1,5 @@
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
-<form id="fr1" action="<?php echo $this->url('calculator\calculator\doAdd'); ?>" method="post">
-    <input type="number" name="op1"><br>
-    <input type="number" name="op2"><br>
-    <input type="submit" value="ok">
-</form>
+<div>
+    <?php echo $this->formHelper($this->url('calculator\calculator\doAdd'), 'Add'); ?>
+</div>
