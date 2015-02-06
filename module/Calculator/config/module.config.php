@@ -9,7 +9,7 @@
 
 return array(
     'Calculator' => array(
-        'zeroes' => 3,
+        'zeroes' => 10,
     ),
     'router' => array(
         'routes' => array(
