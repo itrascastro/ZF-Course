@@ -85,18 +85,12 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'database'  => 'Zend\Db\Adapter\AdapterServiceFactory', // needs a db key in config
             'userDao'   => 'User\Model\Factory\UserDaoFactory',
-            'userDaoTableGateWay' => 'User\Model\Factory\UserDaoTableGateWayFactory',
         ),
     ),
     'controllers' => array(
-        'invokables' => array(
-            //'account' => 'User\Controller\AccountController',
-        ),
         'factories' => array(
-            //'account' => 'User\Controller\Factory\AccountControllerFactory',
-            'account' => 'User\Controller\Factory\AccountTableGateWayControllerFactory',
+            'account' => 'User\Controller\Factory\AccountControllerFactory',
         ),
     ),
     'view_manager' => array(
