@@ -1,0 +1,8 @@
+<?php
+
+return array(
+    'db' => array(
+        'username'          => 'Bookmarks',
+        'password'          => '123456',
+    ),
+);

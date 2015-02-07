@@ -1,0 +1,40 @@
+<?php
+    $id         = (isset($this->id) ? $this->id : '');
+    $email      = (isset($this->email) ? $this->email : '');
+    $password   = (isset($this->password) ? $this->password : '');
+    $role       = (isset($this->role) ? $this->role : '');
+    $date       = (isset($this->date) ? $this->date : '');
+?>
+
+<div>
+    <form id="form1" action="<?php echo $this->action ?>" method="post">
+        <!-- Disabled fields will not be sent in $_POST so we have to create hidden fields -->
+        <input type="hidden" name="id" value="<?php echo $id ?>">
+        <input type="hidden" name="date" value="<?php echo $date ?>">
+        <table>
+            <tr>
+                <td><strong>Id:</strong></td>
+                <td><input type="number" name="id_disabled" value="<?php echo $id ?>" disabled></td>
+            </tr>
+            <tr>
+                <td><strong>Email:</strong></td>
+                <td><input type="email" name="email" value="<?php echo $email ?>"></td>
+            </tr>
+            <tr>
+                <td><strong>Password:</strong></td>
+                <td><input type="text" name="password" value="<?php echo $password ?>"></td>
+            </tr>
+            <tr>
+                <td><strong>Role:</strong></td>
+                <td><input type="text" name="role" value="<?php echo $role ?>"></td>
+            </tr>
+            <tr>
+                <td><strong>Date:</strong></td>
+                <td><input type="date" name="date_disabled" value="<?php echo $date ?>" disabled></td>
+            </tr>
+            <tr align="right">
+                <td colspan="2"><input type="submit"></td>
+            </tr>
+        </table>
+    </form>
+</div>
