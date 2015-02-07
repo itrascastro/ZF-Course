@@ -30,19 +30,19 @@ class UserDao implements UserDaoInterface
     /**
      * @var Adapter
      */
-    private $_db;
+    private $db;
 
     /**
-     * @param Adapter $_db
+     * @param Adapter $db
      */
-    function __construct(Adapter $_db)
+    function __construct(Adapter $db)
     {
-        $this->_db = $_db;
+        $this->db = $db;
     }
 
     public function findAll()
     {
-        $resultSet = $this->_db->query('SELECT * FROM users', Adapter::QUERY_MODE_EXECUTE);
+        $resultSet = $this->db->query('SELECT * FROM users', Adapter::QUERY_MODE_EXECUTE);
         $users = new \ArrayObject();
         $count = $resultSet->count();
 
@@ -59,7 +59,7 @@ class UserDao implements UserDaoInterface
     /**
      * getById
      *
-     * current() is not using FETCH_ASSOC as it is supposed, it is using FETCH_ARRAY !!!
+     * current() is not using FETCH_OBJ, it is using FETCH_ASSOC !!!
      *
      * @param $id
      *
@@ -67,7 +67,7 @@ class UserDao implements UserDaoInterface
      */
     public function getById($id)
     {
-        $stmt = $this->_db->createStatement('SELECT * FROM users WHERE id = ?');
+        $stmt = $this->db->createStatement('SELECT * FROM users WHERE id = ?');
         $resultSet = $stmt->execute([$id]);
         $row = $resultSet->current();
 
@@ -76,19 +76,19 @@ class UserDao implements UserDaoInterface
 
     public function save($data)
     {
-        $stmt = $this->_db->createStatement('INSERT INTO users VALUES (NULL, ?, ?, ?, NULL)');
+        $stmt = $this->db->createStatement('INSERT INTO users VALUES (NULL, ?, ?, ?, NULL)');
         $stmt->execute([$data['email'], $data['password'], $data['role']]);
     }
 
     public function delete($id)
     {
-        $stmt = $this->_db->createStatement('DELETE FROM users WHERE id = ?');
+        $stmt = $this->db->createStatement('DELETE FROM users WHERE id = ?');
         $stmt->execute([$id]);
     }
 
     public function update($data)
     {
-        $stmt = $this->_db->createStatement('UPDATE users SET email = ?, password = ?, role = ? WHERE id = ?');
+        $stmt = $this->db->createStatement('UPDATE users SET email = ?, password = ?, role = ? WHERE id = ?');
         $stmt->execute([$data['email'], $data['password'], $data['role'], $data['id']]);
     }
 }

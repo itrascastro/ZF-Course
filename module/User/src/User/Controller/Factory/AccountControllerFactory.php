@@ -34,7 +34,8 @@ class AccountControllerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $sm = $serviceLocator->getServiceLocator();
-        $userDao = $sm->get('userDao');
+        $userDao = $sm->get('User\Model\UserDao');
+
         return new AccountController($userDao);
     }
 }

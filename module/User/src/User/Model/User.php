@@ -19,19 +19,19 @@ namespace User\Model;
 
 class User 
 {
-    private $_id;
-    private $_email;
-    private $_password;
-    private $_role;
-    private $_date;
+    private $id;
+    private $email;
+    private $password;
+    private $role;
+    private $date;
 
-    function __construct($_id = null, $_email = null, $_password = null, $_role = null, $_date = null)
+    function __construct($id = null, $email = null, $password = null, $role = null, $date = null)
     {
-        $this->_id = $_id;
-        $this->_email = $_email;
-        $this->_password = $_password;
-        $this->_role = $_role;
-        $this->_date = $_date;
+        $this->id           = $id;
+        $this->email        = $email;
+        $this->password     = $password;
+        $this->role         = $role;
+        $this->date         = $date;
     }
 
     /**
@@ -43,11 +43,11 @@ class User
      */
     public function exchangeArray($data)
     {
-        $this->_id          = (!empty($data['id'])) ? $data['id'] : null;
-        $this->_email       = (!empty($data['email'])) ? $data['email'] : null;
-        $this->_password    = (!empty($data['password'])) ? $data['password'] : null;
-        $this->_role        = (!empty($data['role'])) ? $data['role'] : null;
-        $this->_date        = (!empty($data['date'])) ? $data['date'] : null;
+        $this->id          = (!empty($data['id'])) ? $data['id'] : null;
+        $this->email       = (!empty($data['email'])) ? $data['email'] : null;
+        $this->password    = (!empty($data['password'])) ? $data['password'] : null;
+        $this->role        = (!empty($data['role'])) ? $data['role'] : null;
+        $this->date        = (!empty($data['date'])) ? $data['date'] : null;
     }
 
     /**
@@ -55,7 +55,7 @@ class User
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
@@ -63,7 +63,7 @@ class User
      */
     public function setId($id)
     {
-        $this->_id = $id;
+        $this->id = $id;
     }
 
     /**
@@ -71,7 +71,7 @@ class User
      */
     public function getEmail()
     {
-        return $this->_email;
+        return $this->email;
     }
 
     /**
@@ -79,7 +79,7 @@ class User
      */
     public function setEmail($email)
     {
-        $this->_email = $email;
+        $this->email = $email;
     }
 
     /**
@@ -87,7 +87,7 @@ class User
      */
     public function getPassword()
     {
-        return $this->_password;
+        return $this->password;
     }
 
     /**
@@ -95,7 +95,7 @@ class User
      */
     public function setPassword($password)
     {
-        $this->_password = $password;
+        $this->password = $password;
     }
 
     /**
@@ -103,7 +103,7 @@ class User
      */
     public function getRole()
     {
-        return $this->_role;
+        return $this->role;
     }
 
     /**
@@ -111,7 +111,7 @@ class User
      */
     public function setRole($role)
     {
-        $this->_role = $role;
+        $this->role = $role;
     }
 
     /**
@@ -119,7 +119,7 @@ class User
      */
     public function getDate()
     {
-        return $this->_date;
+        return $this->date;
     }
 
     /**
@@ -127,6 +127,6 @@ class User
      */
     public function setDate($date)
     {
-        $this->_date = $date;
+        $this->date = $date;
     }
 }

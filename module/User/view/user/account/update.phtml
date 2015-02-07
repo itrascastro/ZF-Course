@@ -1,5 +1,5 @@
-<?php echo $this->partial('partial/form', [
-    'action'    => $this->url('account_doUpdate'),
+<?php echo $this->partial('user/account/partial/form', [
+    'action'    => $this->url('user\account\doUpdate'),
     'id'        => $this->user->getId(),
     'email'     => $this->user->getEmail(),
     'password'  => $this->user->getPassword(),

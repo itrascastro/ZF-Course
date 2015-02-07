@@ -34,6 +34,7 @@ class UserDaoFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $database = $serviceLocator->get('database');
+
         return new UserDao($database);
     }
 }
