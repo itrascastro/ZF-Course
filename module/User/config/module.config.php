@@ -86,11 +86,13 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'User\Model\UserDao'   => 'User\Model\Factory\UserDaoFactory',
+            'User\Model\UserDaoTableGateway' => 'User\Model\Factory\UserDaoTableGatewayFactory',
         ),
     ),
     'controllers' => array(
         'factories' => array(
-            'User\Controller\Account' => 'User\Controller\Factory\AccountControllerFactory',
+            //'User\Controller\Account' => 'User\Controller\Factory\AccountControllerFactory',
+            'User\Controller\Account' => 'User\Controller\Factory\AccountControllerTableGatewayFactory',
         ),
     ),
     'view_manager' => array(
