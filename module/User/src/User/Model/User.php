@@ -17,21 +17,36 @@
 namespace User\Model;
 
 
-class User 
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+use Zend\Validator\InArray;
+
+class User implements InputFilterAwareInterface
 {
+    // for binding to work with the form this variables have the same name as the form fields
+    // not use here '_' to denote private property
+
     private $id;
     private $email;
     private $password;
     private $role;
     private $date;
 
-    function __construct($id = null, $email = null, $password = null, $role = null, $date = null)
+    /**
+     * @var InputFilterInterface
+     *
+     * This variable is needed for the input filter
+     */
+    private $_inputFilter;
+
+    function __construct($_id = null, $_email = null, $_password = null, $_role = null, $_date = null)
     {
-        $this->id           = $id;
-        $this->email        = $email;
-        $this->password     = $password;
-        $this->role         = $role;
-        $this->date         = $date;
+        $this->id = $_id;
+        $this->email = $_email;
+        $this->password = $_password;
+        $this->role = $_role;
+        $this->date = $_date;
     }
 
     /**
@@ -51,7 +66,19 @@ class User
     }
 
     /**
-     * @return mixed
+     * getArrayCopy
+     *
+     * Needed for use in form binding
+     *
+     * @return array
+     */
+    public function getArrayCopy()
+    {
+        return get_object_vars($this);
+    }
+
+    /**
+     * @return null
      */
     public function getId()
     {
@@ -59,7 +86,7 @@ class User
     }
 
     /**
-     * @param mixed $id
+     * @param null $id
      */
     public function setId($id)
     {
@@ -67,7 +94,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return null
      */
     public function getEmail()
     {
@@ -75,7 +102,7 @@ class User
     }
 
     /**
-     * @param mixed $email
+     * @param null $email
      */
     public function setEmail($email)
     {
@@ -83,7 +110,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return null
      */
     public function getPassword()
     {
@@ -91,7 +118,7 @@ class User
     }
 
     /**
-     * @param mixed $password
+     * @param null $password
      */
     public function setPassword($password)
     {
@@ -99,7 +126,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return null
      */
     public function getRole()
     {
@@ -107,7 +134,7 @@ class User
     }
 
     /**
-     * @param mixed $role
+     * @param null $role
      */
     public function setRole($role)
     {
@@ -115,7 +142,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return null
      */
     public function getDate()
     {
@@ -123,10 +150,102 @@ class User
     }
 
     /**
-     * @param mixed $date
+     * @param null $date
      */
     public function setDate($date)
     {
         $this->date = $date;
     }
+
+    /**
+     * Set input filter
+     *
+     * @param  InputFilterInterface $inputFilter
+     *
+     * @return InputFilterAwareInterface
+     */
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        throw new \Exception('Not used');
+    }
+
+    /**
+     * Retrieve input filter
+     *
+     * @return InputFilterInterface
+     */
+    public function getInputFilter()
+    {
+        if (!$this->_inputFilter) {
+            $inputFilter = new InputFilter();
+
+            $inputFilter->add(array(
+                'name' => 'id',
+                'continue_if_empty' => true,
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'email',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StringTrim'), // clean blank spaces
+                    array('name' => 'StripTags'), // clean malicious code
+                    array('name' => 'StringToLower'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'EmailAddress',
+                        'options' => array(
+                            'messages' => array(
+                                'emailAddressInvalidFormat' => 'You entered an invalid email address',
+                            ),
+                        ),
+                    ),
+                    array(
+                        'name' => 'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                'isEmpty' => 'Email address is required',
+                            ),
+                        ),
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'password',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Alnum'),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'role',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Alpha'), // only letters
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'InArray',
+                        'options' => array(
+                            'haystack' => array('user', 'admin'),
+                            'strict'   => InArray::COMPARE_STRICT
+                        ),
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'date',
+                'continue_if_empty' => true,
+            ));
+
+            $this->_inputFilter = $inputFilter;
+        }
+
+        return $this->_inputFilter;
+    }
+
 }
