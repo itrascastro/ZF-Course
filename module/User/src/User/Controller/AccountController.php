@@ -50,7 +50,7 @@ class AccountController extends AbstractActionController
         $form->get('submit')->setValue('Create New User');
         $form->setAttribute('action', $this->url()->fromRoute('user\account\doCreate'));
 
-        return ['form' => $form];
+        return ['form' => $form, 'isUpdate' => false];
     }
 
     public function doCreateAction()
@@ -81,13 +81,13 @@ class AccountController extends AbstractActionController
             $this->layout()->title = 'Create User - Error - Review your data';
 
             // we reuse the create view
-            $view = new ViewModel(['form' => $form]);
+            $view = new ViewModel(['form' => $form, 'isUpdate' => false]);
             $view->setTemplate('user/account/create.phtml');
 
             return $view;
         }
 
-        $this->redirect()->toRoute('account_create');
+        $this->redirect()->toRoute('user\account\create');
     }
 
     public function viewAction()
@@ -146,7 +146,7 @@ class AccountController extends AbstractActionController
 
                 $this->model->update($data);
 
-                $this->redirect()->toRoute('user\account\index');
+                return $this->redirect()->toRoute('user\account\index');
             }
 
             $form->prepare();

@@ -38,7 +38,7 @@ class User implements InputFilterAwareInterface
      *
      * This variable is needed for the input filter
      */
-    private $_inputFilter;
+    private $inputFilter;
 
     function __construct($_id = null, $_email = null, $_password = null, $_role = null, $_date = null)
     {
@@ -176,7 +176,7 @@ class User implements InputFilterAwareInterface
      */
     public function getInputFilter()
     {
-        if (!$this->_inputFilter) {
+        if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
 
             $inputFilter->add(array(
@@ -242,10 +242,10 @@ class User implements InputFilterAwareInterface
                 'continue_if_empty' => true,
             ));
 
-            $this->_inputFilter = $inputFilter;
+            $this->inputFilter = $inputFilter;
         }
 
-        return $this->_inputFilter;
+        return $this->inputFilter;
     }
 
 }
