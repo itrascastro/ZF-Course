@@ -16,12 +16,12 @@ use Zend\Mvc\MvcEvent;
 
 class Module implements AutoloaderProviderInterface
 {
-    public function init(ModuleManager $moduleManager)
-    {
-        $sm = $moduleManager->getEvent()->getParam('ServiceManager');
-        $applicationConfig = $sm->get('applicationconfig');
-        var_dump($applicationConfig['modules']);
-    }
+//    public function init(ModuleManager $moduleManager)
+//    {
+//        $sm = $moduleManager->getEvent()->getParam('ServiceManager');
+//        $applicationConfig = $sm->get('applicationconfig');
+//        var_dump($applicationConfig['modules']);
+//    }
 
     public function onBootstrap(MvcEvent $event)
     {
@@ -31,8 +31,8 @@ class Module implements AutoloaderProviderInterface
         $layout = $event->getViewModel();
         $layout->setVariable('title', $title);
 
-        $em = $event->getApplication()->getEventManager();
-        $em->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'));
+//        $em = $event->getApplication()->getEventManager();
+//        $em->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'));
     }
 
     public function onDispatch(MvcEvent $event)

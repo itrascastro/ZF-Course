@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <?php if(is_array($messages) && !empty($messages)): ?>
+                <div class="alert">
+                    <ul>
+                        <?php foreach ($messages as $msg): ?>
+                            <li><?php echo $msg; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+            <?php endif; ?>
+            <div class="account-wall">
+                <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                     alt="">
+                <?php echo $this->form()->openTag($form); ?>
+                    <?php echo $this->formElementErrors($form->get('email')); ?>
+                    <?php echo $this->formElement($form->get('email')); ?>
+                    <?php echo $this->formElementErrors($form->get('password')); ?>
+                    <?php echo $this->formElement($form->get('password')); ?>
+                    <?php echo $this->formElement($form->get('submit')); ?>
+                    <label class="checkbox pull-left">
+                        <?php echo $this->formElement($form->get('rememberme')); ?>
+                        Remember me
+                    </label>
+                    <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                <?php echo $this->form()->closeTag(); ?>
+            </div>
+            <a href="#" class="text-center new-account">Create an account</a>
+        </div>
+    </div>
+</div>

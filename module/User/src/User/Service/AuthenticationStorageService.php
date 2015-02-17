@@ -14,14 +14,22 @@
  * file that was distributed with this source code.
  */
 
-namespace User\Model\Interfaces;
+namespace User\Service;
 
 
-interface UserDaoInterface
+use Zend\Authentication\Storage\Session;
+
+class AuthenticationStorageService extends Session
 {
-    public function findAll();
-    public function getById($id);
-    public function save($data);
-    public function delete($id);
-    public function update($data);
+    public function setRememberMe($rememberMe = 0, $time = 2592000)
+    {
+        if ($rememberMe == 1) {
+            $this->session->getManager()->rememberMe($time);
+        }
+    }
+
+    public function forgetMe()
+    {
+        $this->session->getManager()->forgetMe();
+    }
 }

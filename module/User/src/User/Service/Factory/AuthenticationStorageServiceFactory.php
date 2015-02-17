@@ -14,28 +14,27 @@
  * file that was distributed with this source code.
  */
 
-namespace User\Controller\Factory;
+namespace User\Service\Factory;
 
 
-use User\Controller\AccountController;
+use User\Service\AuthenticationStorageService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AccountControllerFactory implements FactoryInterface
+class AuthenticationStorageServiceFactory implements FactoryInterface
 {
 
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return AccountController
+     * @return mixed
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $sm = $serviceLocator->getServiceLocator();
-        $userDao = $sm->get('User\Model\UserDao');
+        $config = $serviceLocator->get('config');
+        $appName = $config['application']['name'];
 
-        return new AccountController($userDao);
+        return new AuthenticationStorageService($appName);
     }
 }

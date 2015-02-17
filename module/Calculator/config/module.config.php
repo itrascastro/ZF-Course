@@ -95,7 +95,7 @@ return array(
     ),
     'view_manager' => array(
         'template_map' => array(
-            'layout/layout'             => __DIR__ . '/../view/layout/layout.phtml',
+            //'layout/layout'             => __DIR__ . '/../view/layout/layout.phtml',
             'calculator/layout/header'  => __DIR__ . '/../view/layout/header.phtml',
             'calculator/layout/footer'  => __DIR__ . '/../view/layout/footer.phtml',
             'calculator/partial/menu'   => __DIR__ . '/../view/calculator/calculator/partial/menu.phtml',

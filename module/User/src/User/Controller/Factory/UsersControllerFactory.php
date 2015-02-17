@@ -14,14 +14,14 @@
  * file that was distributed with this source code.
  */
 
-namespace User\Model\Factory;
+namespace User\Controller\Factory;
 
 
-use User\Model\UserDao;
+use User\Controller\UsersController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class UserDaoFactory implements FactoryInterface
+class UsersControllerFactory implements FactoryInterface
 {
 
     /**
@@ -29,12 +29,13 @@ class UserDaoFactory implements FactoryInterface
      *
      * @param ServiceLocatorInterface $serviceLocator
      *
-     * @return UserDao
+     * @return mixed
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $database = $serviceLocator->get('database');
+        $sm = $serviceLocator->getServiceLocator();
+        $model = $sm->get('User\Model\UsersModel');
 
-        return new UserDao($database);
+        return new UsersController($model);
     }
 }

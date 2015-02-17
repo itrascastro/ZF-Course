@@ -14,34 +14,27 @@
  * file that was distributed with this source code.
  */
 
-namespace User\Model\Factory;
+namespace User\Controller\Factory;
 
 
-use User\Model\User;
-use User\Model\UserDaoTableGateway;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\TableGateway\TableGateway;
+use User\Controller\LoginController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class UserDaoTableGatewayFactory implements FactoryInterface
+class LoginControllerFactory implements FactoryInterface
 {
 
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
-     *
      * @return mixed
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $resultSetPrototype = new ResultSet();
-        $resultSetPrototype->setArrayObjectPrototype(new User());
-        $adapter = $serviceLocator->get('database');
-        $table = 'users';
-        $tablegateway = new TableGateway($table, $adapter, null, $resultSetPrototype);
+        $sm = $serviceLocator->getServiceLocator();
+        $authenticationService = $sm->get('User\Service\Authentication');
 
-        return new UserDaoTableGateway($tablegateway);
+        return new LoginController($authenticationService);
     }
 }

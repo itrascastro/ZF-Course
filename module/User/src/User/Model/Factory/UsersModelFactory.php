@@ -14,14 +14,17 @@
  * file that was distributed with this source code.
  */
 
-namespace User\Controller\Factory;
+namespace User\Model\Factory;
 
 
-use User\Controller\AccountController;
+use User\Model\UserModel;
+use User\Model\UsersModel;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AccountControllerTableGatewayFactory implements FactoryInterface
+class UsersModelFactory implements FactoryInterface
 {
 
     /**
@@ -33,9 +36,12 @@ class AccountControllerTableGatewayFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $sm = $serviceLocator->getServiceLocator();
-        $model = $sm->get('User\Model\UserDaoTableGateway');
+        $resultSetPrototype = new ResultSet();
+        $resultSetPrototype->setArrayObjectPrototype(new UserModel());
+        $adapter = $serviceLocator->get('database');
+        $table = 'User';
+        $tablegateway = new TableGateway($table, $adapter, null, $resultSetPrototype);
 
-        return new AccountController($model);
+        return new UsersModel($tablegateway);
     }
 }

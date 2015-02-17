@@ -16,26 +16,30 @@
 
 namespace User\Controller;
 
-use User\Form\User as UserForm;
-use User\Model\Interfaces\UserDaoInterface;
-use User\Model\User;
+use User\Form\InputFilter\UserInputFilter;
+use User\Form\UserForm;
+use User\Model\UsersModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class AccountController extends AbstractActionController
+class UsersController extends AbstractActionController
 {
     /**
-     * @var UserDaoInterface
+     * @var UsersModel
      */
     private $model;
 
-    function __construct(UserDaoInterface $model)
+    function __construct(UsersModel $model)
     {
         $this->model = $model;
     }
 
     public function indexAction()
     {
+//        if (!$this->identity()) {
+//            $this->redirect()->toRoute('user\login\login');
+//        }
+
         $this->layout()->title = 'List Users';
         $users = $this->model->findAll();
 
@@ -48,7 +52,7 @@ class AccountController extends AbstractActionController
 
         $form = new UserForm();
         $form->get('submit')->setValue('Create New User');
-        $form->setAttribute('action', $this->url()->fromRoute('user\account\doCreate'));
+        $form->setAttribute('action', $this->url()->fromRoute('user\users\doCreate'));
 
         return ['form' => $form, 'isUpdate' => false];
     }
@@ -59,13 +63,14 @@ class AccountController extends AbstractActionController
 
         if ($request->isPost()) {
             $form = new UserForm();
-            $userEntity = new User();
-            $form->setInputFilter($userEntity->getInputFilter());
+            $inputFilter = new UserInputFilter();
+            $form->setInputFilter($inputFilter->getInputFilter());
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
                 $formData = $form->getData();
 
+                $data['username']   = $formData['username'];
                 $data['email']      = $formData['email'];
                 $data['password']   = $formData['password'];
                 $data['role']       = $formData['role'];
@@ -73,7 +78,7 @@ class AccountController extends AbstractActionController
 
                 $this->model->save($data);
 
-                $this->redirect()->toRoute('user\account\index');
+                $this->redirect()->toRoute('user\users\index');
             }
 
             $form->prepare();
@@ -82,12 +87,12 @@ class AccountController extends AbstractActionController
 
             // we reuse the create view
             $view = new ViewModel(['form' => $form, 'isUpdate' => false]);
-            $view->setTemplate('user/account/create.phtml');
+            $view->setTemplate('user/users/create.phtml');
 
             return $view;
         }
 
-        $this->redirect()->toRoute('user\account\create');
+        $this->redirect()->toRoute('user\users\create');
     }
 
     public function viewAction()
@@ -104,7 +109,7 @@ class AccountController extends AbstractActionController
     {
         $this->model->delete($this->params()->fromRoute('id'));
 
-        $this->redirect()->toRoute('user\account\index');
+        $this->redirect()->toRoute('user\users\index');
     }
 
     public function updateAction()
@@ -114,13 +119,13 @@ class AccountController extends AbstractActionController
         $user = $this->model->getById($this->params()->fromRoute('id'));
 
         $form = new UserForm();
-        $form->setAttribute('action', $this->url()->fromRoute('user\account\doUpdate'));
+        $form->setAttribute('action', $this->url()->fromRoute('user\users\doUpdate'));
         $form->bind($user);
         $form->get('submit')->setAttribute('value', 'Edit User');
 
         // we reuse the create view
         $view = new ViewModel(['form' => $form, 'isUpdate' => true]);
-        $view->setTemplate('user/account/create.phtml');
+        $view->setTemplate('user/users/create.phtml');
 
         return $view;
     }
@@ -131,14 +136,15 @@ class AccountController extends AbstractActionController
 
         if ($request->isPost()) {
             $form = new UserForm();
-            $userEntity = new User();
-            $form->setInputFilter($userEntity->getInputFilter());
+            $inputFilter = new UserInputFilter();
+            $form->setInputFilter($inputFilter->getInputFilter());
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
                 $formData = $form->getData();
 
                 $data['id']         = $formData['id'];
+                $data['username']   = $formData['username'];
                 $data['email']      = $formData['email'];
                 $data['password']   = $formData['password'];
                 $data['role']       = $formData['role'];
@@ -146,7 +152,7 @@ class AccountController extends AbstractActionController
 
                 $this->model->update($data);
 
-                return $this->redirect()->toRoute('user\account\index');
+                return $this->redirect()->toRoute('user\users\index');
             }
 
             $form->prepare();
@@ -155,12 +161,17 @@ class AccountController extends AbstractActionController
 
             // we reuse the create view
             $view = new ViewModel(['form' => $form, 'isUpdate' => true]);
-            $view->setTemplate('user/account/create.phtml');
+            $view->setTemplate('user/users/create.phtml');
 
             return $view;
         }
 
-        $this->redirect()->toRoute('user\account\index');
+        $this->redirect()->toRoute('user\users\index');
+    }
+
+    public function forbiddenAction()
+    {
+        return [];
     }
 }
 

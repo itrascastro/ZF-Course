@@ -16,11 +16,9 @@
 
 namespace User\Model;
 
-
-use User\Model\Interfaces\UserDaoInterface;
 use Zend\Db\TableGateway\TableGateway;
 
-class UserDaoTableGateway implements UserDaoInterface
+class UsersModel
 {
     /**
      * @var TableGateway

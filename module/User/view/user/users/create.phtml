@@ -7,6 +7,13 @@
         <?php endif; ?>
         <table>
             <tr>
+                <td colspan="2"><?php echo $this->formElementErrors($form->get('username')); ?></td>
+            </tr>
+            <tr>
+                <td><strong>Username:</strong></td>
+                <td><?php echo $this->formElement($form->get('username')) ?></td>
+            </tr>
+            <tr>
                 <td colspan="2"><?php echo $this->formElementErrors($form->get('email')); ?></td>
             </tr>
             <tr>

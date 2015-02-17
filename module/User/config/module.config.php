@@ -2,102 +2,145 @@
 return array(
     'router' => array(
         'routes' => array(
-            'user\account\index' => array(
+            'user\users\index' => array(
                 'type' => 'Literal',
                 'options' => array(
-                    'route'    => '/account/',
+                    'route'    => '/admin/users/',
                     'defaults' => array(
-                        'controller' => 'User\Controller\Account',
+                        'controller' => 'User\Controller\Users',
                         'action'     => 'index',
+                        'roles'      => ['admin', 'user'],
                     ),
                 ),
             ),
-            'user\account\view' => array(
+            'user\users\view' => array(
                 'type'              => 'Segment',
                 'options'           => array(
-                    'route'         => '/account/view/id/[:id]/',
+                    'route'         => '/admin/users/view/id/[:id]/',
                     'constraints'   => array(
                         'id' => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'User\Controller\Account',
+                        'controller' => 'User\Controller\Users',
                         'action'     => 'view',
+                        'roles'      => ['admin', 'user'],
                     ),
                 ),
             ),
-            'user\account\create' => array(
+            'user\users\create' => array(
                 'type' => 'Literal',
                 'options' => array(
-                    'route'    => '/account/create/',
+                    'route'    => '/admin/users/create/',
                     'defaults' => array(
-                        'controller' => 'User\Controller\Account',
+                        'controller' => 'User\Controller\Users',
                         'action'     => 'create',
+                        'roles'      => ['admin'],
                     ),
                 ),
             ),
-            'user\account\doCreate' => array(
+            'user\users\doCreate' => array(
                 'type' => 'Literal',
                 'options' => array(
-                    'route'    => '/account/do-create/',
+                    'route'    => '/admin/users/do-create/',
                     'defaults' => array(
-                        'controller' => 'User\Controller\Account',
+                        'controller' => 'User\Controller\Users',
                         'action'     => 'doCreate',
+                        'roles'      => ['admin'],
                     ),
                 ),
             ),
-            'user\account\delete' => array(
+            'user\users\delete' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route'    => '/account/delete/id/[:id]/',
+                    'route'    => '/admin/users/delete/id/[:id]/',
                     'constraints' => array(
                         'id' => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'User\Controller\Account',
+                        'controller' => 'User\Controller\Users',
                         'action'     => 'delete',
+                        'roles'      => ['admin'],
                     ),
                 ),
             ),
-            'user\account\update' => array(
+            'user\users\update' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route'    => '/account/update/id/[:id]/',
+                    'route'    => '/admin/users/update/id/[:id]/',
                     'constraints' => array(
                         'id' => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'User\Controller\Account',
+                        'controller' => 'User\Controller\Users',
                         'action'     => 'update',
+                        'roles'      => ['admin'],
                     ),
                 ),
             ),
-            'user\account\doUpdate' => array(
+            'user\users\doUpdate' => array(
                 'type' => 'Literal',
                 'options' => array(
-                    'route'    => '/account/do-update/',
+                    'route'    => '/admin/users/do-update/',
                     'defaults' => array(
-                        'controller' => 'User\Controller\Account',
+                        'controller' => 'User\Controller\Users',
                         'action'     => 'doUpdate',
+                        'roles'      => ['admin'],
+                    ),
+                ),
+            ),
+            'user\login\login' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route'    => '/login/',
+                    'defaults' => array(
+                        'controller' => 'User\Controller\Login',
+                        'action'     => 'login',
+                        'roles'      => ['guest'],
+                    ),
+                ),
+            ),
+            'user\login\doLogin' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route'    => '/do-login/',
+                    'defaults' => array(
+                        'controller' => 'User\Controller\Login',
+                        'action'     => 'doLogin',
+                        'roles'      => ['guest'],
+                    ),
+                ),
+            ),
+            'user\login\logout' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route'    => '/logout/',
+                    'defaults' => array(
+                        'controller' => 'User\Controller\Login',
+                        'action'     => 'logout',
+                        'roles'      => ['admin', 'user'],
                     ),
                 ),
             ),
         ),
     ),
     'service_manager' => array(
+        'aliases' => array(
+            'Zend\Authentication\AuthenticationService' => 'User\Service\Authentication', // needed for identity plugin
+        ),
         'factories' => array(
-            'User\Model\UserDao'   => 'User\Model\Factory\UserDaoFactory',
-            'User\Model\UserDaoTableGateway' => 'User\Model\Factory\UserDaoTableGatewayFactory',
+            'User\Model\UsersModel'                 => 'User\Model\Factory\UsersModelFactory',
+            'User\Service\AuthenticationStorage'    => 'User\Service\Factory\AuthenticationStorageServiceFactory',
+            'User\Service\Authentication'           => 'User\Service\Factory\AuthenticationServiceFactory',
         ),
     ),
     'controllers' => array(
         'factories' => array(
-            //'User\Controller\Account' => 'User\Controller\Factory\AccountControllerFactory',
-            'User\Controller\Account' => 'User\Controller\Factory\AccountControllerTableGatewayFactory',
+            'User\Controller\Users' => 'User\Controller\Factory\UsersControllerFactory',
+            'User\Controller\Login' => 'User\Controller\Factory\LoginControllerFactory',
         ),
     ),
     'view_manager' => array(
         'template_map'              => array(
-            'user/account/partial/form' => __DIR__ . '/../view/user/account/partial/form.phtml',
         ),
         'template_path_stack'       => array(
             __DIR__ . '/../view',
