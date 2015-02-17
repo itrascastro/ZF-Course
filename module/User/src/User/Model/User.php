@@ -40,13 +40,13 @@ class User implements InputFilterAwareInterface
      */
     private $inputFilter;
 
-    function __construct($_id = null, $_email = null, $_password = null, $_role = null, $_date = null)
+    function __construct($id = null, $email = null, $password = null, $role = null, $date = null)
     {
-        $this->id = $_id;
-        $this->email = $_email;
-        $this->password = $_password;
-        $this->role = $_role;
-        $this->date = $_date;
+        $this->id           = $id;
+        $this->email        = $email;
+        $this->password     = $password;
+        $this->role         = $role;
+        $this->date         = $date;
     }
 
     /**
