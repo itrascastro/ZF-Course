@@ -16,8 +16,6 @@
 
 namespace User\Controller;
 
-
-use User\Form\InputFilter\LoginFormInputFilter;
 use User\Form\LoginForm;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -43,13 +41,19 @@ class LoginController extends AbstractActionController
     private $storage;
 
     /**
+     * @var LoginForm
+     */
+    private $form;
+
+    /**
      * @param AuthenticationService $authenticationService
      */
-    function __construct(AuthenticationService $authenticationService)
+    function __construct(AuthenticationService $authenticationService, LoginForm $form)
     {
         $this->authenticationService    = $authenticationService;
         $this->adapter                  = $authenticationService->getAdapter();
         $this->storage                  = $authenticationService->getStorage();
+        $this->form                     = $form;
     }
 
     public function loginAction()
@@ -60,12 +64,11 @@ class LoginController extends AbstractActionController
 
         $this->layout()->title = 'Login';
 
-        $form = new LoginForm();
-        $form->get('submit')->setValue('Sign in');
-        $form->setAttribute('action', $this->url()->fromRoute('user\login\doLogin'));
+        $this->form->get('submit')->setValue('Sign in');
+        $this->form->setAttribute('action', $this->url()->fromRoute('user\login\doLogin'));
 
         return [
-            'form'      => $form,
+            'form'      => $this->form,
             'messages'  => $this->flashMessenger()->getMessages(),
         ];
 
@@ -76,14 +79,11 @@ class LoginController extends AbstractActionController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $form = new LoginForm();
-            $inputFilter = new LoginFormInputFilter();
-            $form->setInputFilter($inputFilter->getInputFilter());
-            $form->setData($request->getPost());
+            $this->form->setData($request->getPost());
             $messages = '';
 
-            if ($form->isValid()) {
-                $data = $form->getData();
+            if ($this->form->isValid()) {
+                $data = $this->form->getData();
 
                 $this->adapter
                     ->setIdentity($data['email'])
@@ -106,12 +106,12 @@ class LoginController extends AbstractActionController
                 }
             }
 
-            $form->prepare();
+            $this->form->prepare();
 
             $this->layout()->title = 'Login - Error - Review your data';
 
             $view = new ViewModel([
-                'form'      => $form,
+                'form'      => $this->form,
                 'messages'  => $messages,
             ]);
             $view->setTemplate('user/login/login.phtml');

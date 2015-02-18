@@ -131,6 +131,8 @@ return array(
             'User\Model\UsersModel'                 => 'User\Model\Factory\UsersModelFactory',
             'User\Service\AuthenticationStorage'    => 'User\Service\Factory\AuthenticationStorageServiceFactory',
             'User\Service\Authentication'           => 'User\Service\Factory\AuthenticationServiceFactory',
+            'User\Form\User'                        => 'User\Form\Factory\UserFormFactory',
+            'User\Form\Login'                       => 'User\Form\Factory\LoginFormFactory',
         ),
     ),
     'controllers' => array(
