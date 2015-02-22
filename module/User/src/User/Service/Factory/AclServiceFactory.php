@@ -54,7 +54,6 @@ class AclServiceFactory implements FactoryInterface
             $this->parseRoute($route, $value);
         }
 
-        var_dump($this->acl);
         return $this->acl;
     }
 
