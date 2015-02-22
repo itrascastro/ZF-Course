@@ -64,11 +64,11 @@ class AclServiceFactory implements FactoryInterface
         if (!$parent) {
             if (empty($value['child_routes'])) {
                 $this->acl->addResource($route);
-                $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $this->roles;
+                $routeRoles = !empty($value['options']['defaults']['roles']) ? $value['options']['defaults']['roles'] : $this->roles;
                 $this->acl->allow($routeRoles, $route);
             } elseif ($value['may_terminate']) {
                 $this->acl->addResource($route);
-                $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $this->roles;
+                $routeRoles = !empty($value['options']['defaults']['roles']) ? $value['options']['defaults']['roles'] : $this->roles;
                 $this->acl->allow($routeRoles, $route);
 
                 foreach ($value['child_routes'] as $childRoute => $childValue) {
@@ -82,11 +82,11 @@ class AclServiceFactory implements FactoryInterface
         } else {
             if (empty($value['child_routes'])) {
                 $this->acl->addResource($parent . '/' . $route);
-                $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $this->roles;
+                $routeRoles = !empty($value['options']['defaults']['roles']) ? $value['options']['defaults']['roles'] : $this->roles;
                 $this->acl->allow($routeRoles, $parent . '/' . $route);
             } elseif ($value['may_terminate']) {
                 $this->acl->addResource($parent . '/' . $route);
-                $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $this->roles;
+                $routeRoles = !empty($value['options']['defaults']['roles']) ? $value['options']['defaults']['roles'] : $this->roles;
                 $this->acl->allow($routeRoles, $parent . '/' . $route);
 
                 foreach ($value['child_routes'] as $childRoute => $childValue) {
