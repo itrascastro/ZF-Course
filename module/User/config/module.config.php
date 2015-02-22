@@ -12,6 +12,23 @@ return array(
                         'roles'      => ['admin', 'user'],
                     ),
                 ),
+                'may_terminate' => true, // parent route can be alone
+                'child_routes' => array(
+                    'paginator' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'page/[:page]/',
+                            'constraints' => array(
+                                'page' => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'User\Controller\Users',
+                                'action'     => 'index',
+                                'roles'      => ['admin', 'user'],
+                            ),
+                        ),
+                    ),
+                ),
             ),
             'user\users\view' => array(
                 'type'              => 'Segment',

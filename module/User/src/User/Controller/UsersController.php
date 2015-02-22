@@ -54,6 +54,9 @@ class UsersController extends AbstractActionController
         $this->layout()->title = 'List Users';
         $users = $this->model->findAll();
 
+        $users->setCurrentPageNumber($this->params()->fromRoute('page'));
+        $users->setItemCountPerPage(2);
+
         return ['users' => $users];
     }
 

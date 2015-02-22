@@ -23,6 +23,15 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class AclServiceFactory implements FactoryInterface
 {
+    /**
+     * @var Acl
+     */
+    private $acl;
+
+    /**
+     * @var array
+     */
+    private $roles;
 
     /**
      * Create service
@@ -32,23 +41,62 @@ class AclServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $acl = new Acl();
+        $this->acl = new Acl();
 
         $config = $serviceLocator->get('config');
-        $roles = $config['application']['roles'];
+        $this->roles = $config['application']['roles'];
 
-        foreach ($roles as $role) {
-            $acl->addRole($role);
+        foreach ($this->roles as $role) {
+            $this->acl->addRole($role);
         }
 
         $routes = $config['router']['routes'];
 
         foreach ($routes as $route => $value) {
-            $acl->addResource($route);
-            $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $roles;
-            $acl->allow($routeRoles, $route);
+            $this->parseRoute($route, $value);
         }
 
-        return $acl;
+        return $this->acl;
+    }
+
+    private function parseRoute($route, $value, $parent = null)
+    {
+        if (!$parent) {
+            if (empty($value['child_routes'])) {
+                $this->acl->addResource($route);
+                $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $this->roles;
+                $this->acl->allow($routeRoles, $route);
+            } elseif ($value['may_terminate']) {
+                $this->acl->addResource($route);
+                $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $this->roles;
+                $this->acl->allow($routeRoles, $route);
+
+                foreach ($value['child_routes'] as $childRoute => $childValue) {
+                    $this->parseRoute($childRoute, $childValue, $route);
+                }
+            } else {
+                foreach ($value['child_routes'] as $childRoute => $childValue) {
+                    $this->parseRoute($childRoute, $childValue, $route);
+                }
+            }
+        } else {
+            if (empty($value['child_routes'])) {
+                $this->acl->addResource($parent . '/' . $route);
+                $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $this->roles;
+                $this->acl->allow($routeRoles, $parent . '/' . $route);
+            } elseif ($value['may_terminate']) {
+                $this->acl->addResource($parent . '/' . $route);
+                $routeRoles = array_key_exists('roles', $value['options']['defaults']) ? $value['options']['defaults']['roles'] : $this->roles;
+                $this->acl->allow($routeRoles, $parent . '/' . $route);
+
+                foreach ($value['child_routes'] as $childRoute => $childValue) {
+                    $this->parseRoute($childRoute, $childValue, $parent . '/' . $route);
+                }
+            } else {
+                foreach ($value['child_routes'] as $childRoute => $childValue) {
+                    $this->parseRoute($childRoute, $childValue, $parent . '/' . $route);
+                }
+            }
+        }
     }
 }

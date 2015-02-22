@@ -27,6 +27,18 @@
     </table>
 </div>
 
-<div>
-    <p><a href="<?php echo $this->url('user\users\create') ?>">Create a new User</a> | <a href="<?php echo $this->url('user\login\logout') ?>">Logout</a> </p>
+<div class="row pagination">
+    <div class="col-md-12">
+        <?php echo $this->paginationControl(
+            $this->users,
+            'Sliding',
+            'user/partial/search-pagination.phtml',
+            array('route' => 'user\users\index/paginator')) ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <a class="btn btn-primary" href="<?php echo $this->url('user\users\create') ?>">Create a new User</a> | <a href="<?php echo $this->url('user\login\logout') ?>">Logout</a>
+    </div>
 </div>
