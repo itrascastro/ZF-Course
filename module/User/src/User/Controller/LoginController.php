@@ -136,9 +136,4 @@ class LoginController extends AbstractActionController
 
         return $this->redirect()->toRoute('user\login\login');
     }
-
-    public function testAction()
-    {
-        return 3;
-    }
 }
