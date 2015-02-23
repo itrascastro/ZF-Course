@@ -22,9 +22,7 @@ return array(
                                 'page' => '[0-9]+',
                             ),
                             'defaults' => array(
-                                'controller' => 'User\Controller\Users',
-                                'action'     => 'index',
-                                'roles'      => ['admin', 'user'],
+                                // Same as parent. We can also avoid this 'defaults' key
                             ),
                         ),
                     ),

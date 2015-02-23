@@ -14,33 +14,27 @@
  * file that was distributed with this source code.
  */
 
-namespace User\Controller\Factory;
+namespace Application\Controller\Factory;
 
 
-use User\Controller\UsersController;
+use Application\Controller\IndexController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class UsersControllerFactory implements FactoryInterface
+class IndexControllerFactory implements FactoryInterface
 {
 
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
-     *
      * @return mixed
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $sm = $serviceLocator->getServiceLocator();
-        $model = $sm->get('User\Model\UsersModel');
-        $form = $sm->get('User\Form\User');
+        $login = $serviceLocator->get('User\Controller\Login');
+        echo $login->testAction();
 
-        $loginController =  $serviceLocator->get('User\Controller\Login');
-
-        echo $loginController->testAction();
-
-        return new UsersController($model, $form);
+        return new IndexController();
     }
 }
