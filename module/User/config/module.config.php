@@ -2,6 +2,30 @@
 return array(
     'router' => array(
         'routes' => array(
+            'user\usersREST' => array(
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'    => '/users-rest/',
+                    'defaults' => array(
+                        'controller' => 'User\Controller\UsersREST',
+                    ),
+                ),
+                'may_terminate' => true, // parent route can be alone
+                'child_routes' => array(
+                    'withID' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'id/[:id]/',
+                            'constraints' => array(
+                                'id' => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                // Same as parent. We can also avoid this 'defaults' key
+                            ),
+                        ),
+                    ),
+                ),
+            ),
             'user\users\index' => array(
                 'type' => 'Literal',
                 'options' => array(
@@ -153,8 +177,9 @@ return array(
     ),
     'controllers' => array(
         'factories' => array(
-            'User\Controller\Users' => 'User\Controller\Factory\UsersControllerFactory',
-            'User\Controller\Login' => 'User\Controller\Factory\LoginControllerFactory',
+            'User\Controller\Users'         => 'User\Controller\Factory\UsersControllerFactory',
+            'User\Controller\Login'         => 'User\Controller\Factory\LoginControllerFactory',
+            'User\Controller\UsersREST'     => 'User\Controller\Factory\UsersRESTControllerFactory',
         ),
     ),
     'view_manager' => array(
@@ -162,6 +187,9 @@ return array(
         ),
         'template_path_stack'       => array(
             __DIR__ . '/../view',
+        ),
+        'strategies'                => array(
+            'ViewJsonStrategy',
         ),
     ),
 );

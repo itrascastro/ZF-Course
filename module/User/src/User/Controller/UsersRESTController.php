@@ -18,10 +18,10 @@ namespace User\Controller;
 
 use User\Form\UserForm;
 use User\Model\UsersModel;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\View\Model\JsonModel;
 
-class UsersRESTController extends AbstractActionController
+class UsersRESTController extends AbstractRestfulController
 {
     /**
      * @var UsersModel
@@ -43,141 +43,163 @@ class UsersRESTController extends AbstractActionController
         $this->form = $form;
     }
 
-    public function indexAction()
+    // The following methods will be mapped from the HTTP request
+    // http://framework.zend.com/manual/current/en/modules/zend.mvc.controllers.html#the-abstractrestfulcontroller
+
+    /**
+     * getList
+     *
+     * Maps HTTP Request Method: GET
+     *
+     * Using from the client
+     *
+     * Curl
+     *      curl -i -H "Accept: application/json" http://localhost:8080/users-rest/
+     * Browser
+     *      http://localhost:8080/users-rest/
+     *
+     * @return JsonModel
+     */
+    public function getList()
     {
-//        if (!$this->identity()) {
-//            $this->redirect()->toRoute('user\login\login');
-//        }
+        $users = $this->model->findAll(false);
 
-//        $acl = $this->serviceLocator->get('User\Service\Acl');
-
-        $this->layout()->title = 'List Users';
-        $users = $this->model->findAll();
-
-        $users->setCurrentPageNumber($this->params()->fromRoute('page'));
-        $users->setItemCountPerPage(2);
-
-        return ['users' => $users];
-    }
-
-    public function createAction()
-    {
-        $this->layout()->title = 'Create User';
-
-        $this->form->get('submit')->setValue('Create New User');
-        $this->form->setAttribute('action', $this->url()->fromRoute('user\users\doCreate'));
-
-        return ['form' => $this->form, 'isUpdate' => false];
-    }
-
-    public function doCreateAction()
-    {
-        $request = $this->getRequest();
-
-        if ($request->isPost()) {
-            $this->form->setData($request->getPost());
-
-            if ($this->form->isValid()) {
-                $formData = $this->form->getData();
-
-                $data['username']   = $formData['username'];
-                $data['email']      = $formData['email'];
-                $data['password']   = $formData['password'];
-                $data['role']       = $formData['role'];
-                $data['date']       = date('Y-m-d H:i:s');
-
-                $this->model->save($data);
-
-                return $this->redirect()->toRoute('user\users\index');
-            }
-
-            $this->form->prepare();
-
-            $this->layout()->title = 'Create User - Error - Review your data';
-
-            // we reuse the create view
-            $view = new ViewModel(['form' => $this->form, 'isUpdate' => false]);
-            $view->setTemplate('user/users/create.phtml');
-
-            return $view;
+        foreach ($users as $user) {
+            $userArray  = $user->getArrayCopy();
+            $data[]     = $userArray;
         }
 
-        return $this->redirect()->toRoute('user\users\create');
+        return new JsonModel([
+            'data' => $data
+        ]);
     }
 
-    public function viewAction()
+    /**
+     * get
+     *
+     * Maps HTTP Request Method: GET
+     *
+     * Curl
+     *      curl -i -H "Accept: application/json" http://localhost:8080/users-rest/id/?/
+     * Browser
+     *      http://localhost:8080/users-rest/id/?/
+     *
+     * @param int $id
+     * @return JsonModel
+     */
+    public function get($id)
     {
-        $this->layout()->title = 'User Details';
+        $user       = $this->model->getById($id);
+        $userArray  = $user->getArrayCopy();
 
-        $id = $this->params()->fromRoute('id');
+        return new JsonModel([
+            'data' => $userArray
+        ]);
+    }
+
+    /**
+     * create
+     *
+     * Maps HTTP Request Method: POST
+     *
+     * Curl
+     *      curl -i -H "Accept: application/json" -X POST -d "username=API&email=api@email.com&password=1234&role=user" http://localhost:8080/users-rest/
+     *
+     * @param mixed $data
+     * @return mixed|JsonModel
+     */
+    public function create($data)
+    {
+        $this->form->setData($data);
+
+        if ($this->form->isValid()) {
+            $formData = $this->form->getData();
+
+            $data['username']   = $formData['username'];
+            $data['email']      = $formData['email'];
+            $data['password']   = $formData['password'];
+            $data['role']       = $formData['role'];
+            $data['date']       = date('Y-m-d H:i:s');
+
+            $id = $this->model->save($data);
+
+            // We cannot call $this->get($id) because the request method now is POST instead of GET
+            $user       = $this->model->getById($id);
+            $userArray  = $user->getArrayCopy();
+
+            return new JsonModel([
+                'data' => $userArray,
+            ]);
+        }
+    }
+
+    /**
+     * update
+     *
+     * Maps HTTP Request Method: PUT
+     *
+     * Curl
+     *      curl -i -H "Accept: application/json" -X PUT -d "username=APIUPDATE" http://localhost:8080/users-rest/id/14/
+     *
+     * @param mixed $id
+     * @return mixed|JsonModel
+     */
+    public function update($id, $data)
+    {
         $user = $this->model->getById($id);
+        $user->exchangeArray2($data);
 
-        return ['user' => $user];
-    }
-
-    public function deleteAction()
-    {
-        $this->model->delete($this->params()->fromRoute('id'));
-
-        $this->redirect()->toRoute('user\users\index');
-    }
-
-    public function updateAction()
-    {
-        $this->layout()->title = 'Update User';
-
-        $user = $this->model->getById($this->params()->fromRoute('id'));
-
-        $this->form->get('password')->setAttribute('required', '');
-
-        $this->form->setAttribute('action', $this->url()->fromRoute('user\users\doUpdate'));
-        $user->setPassword('');
-        $this->form->bind($user);
-        $this->form->get('submit')->setAttribute('value', 'Edit User');
-
-        // we reuse the create view
-        $view = new ViewModel(['form' => $this->form, 'isUpdate' => true]);
-        $view->setTemplate('user/users/create.phtml');
-
-        return $view;
-    }
-
-    public function doUpdateAction()
-    {
-        $request = $this->getRequest();
-
-        if ($request->isPost()) {
-            $this->form->setData($request->getPost());
-
-            $this->form->getInputFilter()->get('password')->setAllowEmpty(true);
-
-            if ($this->form->isValid()) {
-                $formData = $this->form->getData();
-
-                $data['id']         = $formData['id'];
-                $data['username']   = $formData['username'];
-                $data['email']      = $formData['email'];
-                $data['password']   = $formData['password'];
-                $data['role']       = $formData['role'];
-                $data['date']       = $formData['date']; //date('Y-m-d H:i:s');
-
-                $this->model->update($data);
-
-                return $this->redirect()->toRoute('user\users\index');
-            }
-
-            $this->form->prepare();
-
-            $this->layout()->title = 'Update User - Error - Review your data';
-
-            // we reuse the create view
-            $view = new ViewModel(['form' => $this->form, 'isUpdate' => true]);
-            $view->setTemplate('user/users/create.phtml');
-
-            return $view;
+        if (!isset($data['password'])) {
+            $user->setPassword(null);
         }
 
-        $this->redirect()->toRoute('user\users\index');
+        $this->form->bind($user);
+        $this->form->getInputFilter()->get('password')->setAllowEmpty(true);
+
+        if ($this->form->isValid()) {
+            $formData = $this->form->getData();
+
+            $data['id']         = $formData->getId();
+            $data['username']   = $formData->getUsername();
+            $data['email']      = $formData->getEmail();
+            $data['password']   = $formData->getPassword();
+            $data['role']       = $formData->getRole();
+            $data['date']       = $formData->getDate();
+
+            $id = $this->model->update($data);
+
+            // We cannot call $this->get($id) because the request method now is POST instead of GET
+            $user       = $this->model->getById($id);
+            $userArray  = $user->getArrayCopy();
+
+            return new JsonModel([
+                'data' => $userArray,
+            ]);
+        }
+
+        return new JsonModel([
+            'error' => true,
+        ]);
+    }
+
+    /**
+     * delete
+     *
+     * Maps HTTP Request Method: DELETE
+     *
+     * Curl
+     *      curl -i -H "Accept: application/json" -X DELETE http://localhost:8080/users-rest/id/?/
+     *
+     * @param mixed $id
+     * @return mixed|JsonModel
+     */
+    public function delete($id)
+    {
+        $this->model->delete($id);
+
+        return new JsonModel([
+            'data' => 'deleted',
+        ]);
     }
 }
 

@@ -63,6 +63,8 @@ class UsersModel
     {
         $data['password'] = md5($data['password']);
         $this->tablegateway->insert($data);
+
+        return $this->tablegateway->getLastInsertValue();
     }
 
     public function delete($id)
@@ -79,5 +81,7 @@ class UsersModel
         }
 
         $this->tablegateway->update($data, ['id' => $data['id']]);
+
+        return $data['id'];
     }
 }

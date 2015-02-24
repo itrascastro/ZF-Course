@@ -46,6 +46,16 @@ class UserModel
         $this->date         = (!empty($data['date'])) ? $data['date'] : null;
     }
 
+    public function exchangeArray2($data)
+    {
+        $this->id           = (!empty($data['id'])) ? $data['id'] : $this->id;
+        $this->username     = (!empty($data['username'])) ? $data['username'] : $this->username;
+        $this->email        = (!empty($data['email'])) ? $data['email'] : $this->email;
+        $this->password     = (!empty($data['password'])) ? $data['password'] : $this->password;
+        $this->role         = (!empty($data['role'])) ? $data['role'] : $this->role;
+        $this->date         = (!empty($data['date'])) ? $data['date'] : $this->date;
+    }
+
     public function getArrayCopy()
     {
         return get_object_vars($this);
