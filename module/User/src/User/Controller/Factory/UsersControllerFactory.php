@@ -37,10 +37,6 @@ class UsersControllerFactory implements FactoryInterface
         $model = $sm->get('User\Model\UsersModel');
         $form = $sm->get('User\Form\User');
 
-        $loginController =  $serviceLocator->get('User\Controller\Login');
-
-        echo $loginController->testAction();
-
         return new UsersController($model, $form);
     }
 }

@@ -46,7 +46,7 @@ class Module implements AutoloaderProviderInterface
         if (!$acl->isAllowed($role, $match->getMatchedRouteName())) {
             $response = $event->getResponse();
             $response->setStatusCode(401); // Auth required
-            $match->setParam('controller', 'User\Controller\Users');
+            $match->setParam('controller', 'User\Controller\Login');
             $match->setParam('action', 'forbidden');
         }
 
