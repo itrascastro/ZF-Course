@@ -39,7 +39,7 @@ class Module implements AutoloaderProviderInterface
         /**
          * @var Acl $acl
          */
-        $acl = $sm->get('User\Service\Acl');
+        $acl = $sm->get('TrascastroACL');
 
         $role = ($identity = $authenticationService->getIdentity()) ? $identity->role : 'guest';
 
@@ -50,6 +50,7 @@ class Module implements AutoloaderProviderInterface
             $match->setParam('action', 'forbidden');
         }
 
+        // we get the layout from the event
         $event->getViewModel()->setVariable('acl', $acl);
     }
 

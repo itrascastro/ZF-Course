@@ -15,7 +15,7 @@ return array(
                     'withID' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => 'id/[:id]/',
+                            'route' => 'id/:id/',
                             'constraints' => array(
                                 'id' => '[0-9]+',
                             ),
@@ -41,12 +41,9 @@ return array(
                     'paginator' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => 'page/[:page]/',
+                            'route' => 'page/:page/',
                             'constraints' => array(
                                 'page' => '[0-9]+',
-                            ),
-                            'defaults' => array(
-                                // Same as parent. We can also avoid this 'defaults' key
                             ),
                         ),
                     ),
@@ -172,7 +169,6 @@ return array(
             'User\Service\Authentication'           => 'User\Service\Factory\AuthenticationServiceFactory',
             'User\Form\User'                        => 'User\Form\Factory\UserFormFactory',
             'User\Form\Login'                       => 'User\Form\Factory\LoginFormFactory',
-            'User\Service\Acl'                      => 'User\Service\Factory\AclServiceFactory',
         ),
     ),
     'controllers' => array(

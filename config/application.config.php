@@ -5,6 +5,7 @@ return array(
         'Application',
         'Calculator',
         'MyString',
+        'TrascastroACL',
         'User',
     ),
 

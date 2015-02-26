@@ -58,7 +58,7 @@ class LoginController extends AbstractActionController
 
     public function loginAction()
     {
-        $acl = $this->serviceLocator->get('User\Service\Acl');
+        $acl = $this->serviceLocator->get('TrascastroAcl');
 
         if ($this->identity()) {
             return $this->redirect()->toRoute('user\users\index');
@@ -100,6 +100,7 @@ class LoginController extends AbstractActionController
                     }
 
                     $user = $this->adapter->getResultRowObject();
+                    //$user = $this->authenticationService->getIdentity();
                     $this->storage->write($user);
 
                     return $this->redirect()->toRoute('user\users\index'); // success

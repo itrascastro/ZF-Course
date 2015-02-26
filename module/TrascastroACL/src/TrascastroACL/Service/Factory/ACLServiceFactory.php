@@ -1,27 +1,22 @@
 <?php
 /**
- * xenFramework (http://xenframework.com/)
+ * (c) Ismael Trascastro <i.trascastro@gmail.com>
  *
- * This file is part of the xenframework package.
- *
- * (c) Ismael Trascastro <itrascastro@xenframework.com>
- *
- * @link        http://github.com/xenframework for the canonical source repository
- * @copyright   Copyright (c) xenFramework. (http://xenframework.com)
+ * @link        http://www.ismaeltrascastro.com
+ * @copyright   Copyright (c) Ismael Trascastro. (http://www.ismaeltrascastro.com)
  * @license     MIT License - http://en.wikipedia.org/wiki/MIT_License
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace User\Service\Factory;
-
+namespace TrascastroACL\Service\Factory;
 
 use Zend\Permissions\Acl\Acl;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AclServiceFactory implements FactoryInterface
+class ACLServiceFactory implements FactoryInterface
 {
     /**
      * @var Acl

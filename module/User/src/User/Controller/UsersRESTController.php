@@ -178,7 +178,7 @@ class UsersRESTController extends AbstractRestfulController
         }
 
         return new JsonModel([
-            'error' => true,
+            'data' => 'error',
         ]);
     }
 
