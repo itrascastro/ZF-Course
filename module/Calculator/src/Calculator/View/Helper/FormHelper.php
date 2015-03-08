@@ -31,16 +31,17 @@ class FormHelper extends AbstractHelper
      */
     private $submit;
 
-    public function __invoke($action, $submit)
+    public function __invoke()
+    {
+        return $this;
+    }
+
+    public function render($action, $submit)
     {
         $this->action = $action;
         $this->submit = $submit;
 
-        return $this->render();
-    }
 
-    private function render()
-    {
         return '
             <form id="calculatorForm" action="' . $this->action . '" method="post">
                 <input type="number" name="op1"><br>
@@ -48,5 +49,10 @@ class FormHelper extends AbstractHelper
                 <input type="submit" value="' . $this->submit . '">
             </form>
         ';
+    }
+
+    public function test()
+    {
+        return 'test';
     }
 }

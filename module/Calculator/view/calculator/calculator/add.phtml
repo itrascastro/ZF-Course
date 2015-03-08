@@ -3,5 +3,5 @@
 <div><?php echo $this->partial('calculator/partial/menu'); ?></div>
 
 <div>
-    <?php echo $this->formHelper($this->url('calculator\calculator\doAdd'), 'Add'); ?>
+    <?php echo $this->formHelper()->render($this->url('calculator\calculator\doAdd'), 'Add'); ?>
 </div>

@@ -35,7 +35,6 @@ class UsersModel
         $this->tablegateway = $tablegateway;
     }
 
-
     /**
      * findAll
      *

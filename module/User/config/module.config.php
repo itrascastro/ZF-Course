@@ -52,7 +52,7 @@ return array(
             'user\users\view' => array(
                 'type'              => 'Segment',
                 'options'           => array(
-                    'route'         => '/admin/users/view/id/[:id]/',
+                    'route'         => '/admin/users/view/id/:id/',
                     'constraints'   => array(
                         'id' => '[0-9]+',
                     ),
